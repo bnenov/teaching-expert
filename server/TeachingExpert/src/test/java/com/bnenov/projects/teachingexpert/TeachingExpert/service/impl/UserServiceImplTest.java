@@ -43,7 +43,6 @@ public class UserServiceImplTest {
     @Test
     final void testCreateUser() {
 
-//        when(modelMapper.map(UserDto.class, UserEntity.class)).thenCallRealMethod().thenReturn(userEntity);
         when(userRepository.findByEmail(anyString())).thenReturn(null);
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
