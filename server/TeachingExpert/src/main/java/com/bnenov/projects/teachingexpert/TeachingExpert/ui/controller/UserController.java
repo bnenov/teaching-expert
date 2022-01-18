@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.modelmapper.ModelMapper;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto createUser(@RequestBody UserRegisterRequestModel userRegisterRequestModel) {
+    public UserDto createUser(@RequestBody @Valid UserRegisterRequestModel userRegisterRequestModel) {
 
         UserDto userDto = modelMapper.map(userRegisterRequestModel, UserDto.class);
 
