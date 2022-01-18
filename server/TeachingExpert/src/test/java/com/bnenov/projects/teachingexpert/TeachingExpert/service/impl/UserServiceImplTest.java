@@ -2,6 +2,7 @@ package com.bnenov.projects.teachingexpert.TeachingExpert.service.impl;
 
 import com.bnenov.projects.teachingexpert.TeachingExpert.dto.UserDto;
 import com.bnenov.projects.teachingexpert.TeachingExpert.entity.UserEntity;
+import com.bnenov.projects.teachingexpert.TeachingExpert.exception.UsernameAlreadyExistException;
 import com.bnenov.projects.teachingexpert.TeachingExpert.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public class UserServiceImplTest {
         userDto.setEmail("test@abv.bg");
         userDto.setPassword("123456");
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(UsernameAlreadyExistException.class, () -> {
             userService.createUser(userDto);
         });
     }
