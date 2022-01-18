@@ -4,6 +4,7 @@ import com.bnenov.projects.teachingexpert.TeachingExpert.dto.UserDto;
 import com.bnenov.projects.teachingexpert.TeachingExpert.entity.UserEntity;
 import com.bnenov.projects.teachingexpert.TeachingExpert.repository.UserRepository;
 import com.bnenov.projects.teachingexpert.TeachingExpert.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
