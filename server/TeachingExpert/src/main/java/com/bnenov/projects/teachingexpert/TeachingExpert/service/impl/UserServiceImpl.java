@@ -5,7 +5,7 @@ import com.bnenov.projects.teachingexpert.TeachingExpert.entity.UserEntity;
 import com.bnenov.projects.teachingexpert.TeachingExpert.exception.UsernameAlreadyExistException;
 import com.bnenov.projects.teachingexpert.TeachingExpert.repository.UserRepository;
 import com.bnenov.projects.teachingexpert.TeachingExpert.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
@@ -16,10 +16,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setUserId(UUID.randomUUID().toString());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         return modelMapper.map(userRepository.save(user), UserDto.class);
     }

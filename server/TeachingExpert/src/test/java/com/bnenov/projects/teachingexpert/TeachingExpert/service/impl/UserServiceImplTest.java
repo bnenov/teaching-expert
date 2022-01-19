@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +24,7 @@ public class UserServiceImplTest {
     UserRepository userRepository;
 
     ModelMapper modelMapper;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
     private AutoCloseable closeable;
 
     @InjectMocks
@@ -34,7 +36,8 @@ public class UserServiceImplTest {
     void setUp() throws Exception {
         closeable = MockitoAnnotations.openMocks(this);
         modelMapper = new ModelMapper();
-        userService = new UserServiceImpl(userRepository, modelMapper);
+        bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        userService = new UserServiceImpl(userRepository, modelMapper, bCryptPasswordEncoder);
         userEntity = new UserEntity();
         userEntity.setId(1);
         userEntity.setEmail("test23@abv.bg");
