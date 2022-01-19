@@ -4,6 +4,7 @@ import com.bnenov.projects.teachingexpert.TeachingExpert.dto.UserDto;
 import com.bnenov.projects.teachingexpert.TeachingExpert.entity.UserEntity;
 import com.bnenov.projects.teachingexpert.TeachingExpert.exception.UsernameAlreadyExistException;
 import com.bnenov.projects.teachingexpert.TeachingExpert.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +23,7 @@ public class UserServiceImplTest {
     UserRepository userRepository;
 
     ModelMapper modelMapper;
+    private AutoCloseable closeable;
 
     @InjectMocks
     UserServiceImpl userService;
@@ -30,7 +32,7 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
         modelMapper = new ModelMapper();
         userService = new UserServiceImpl(userRepository, modelMapper);
         userEntity = new UserEntity();
@@ -38,6 +40,11 @@ public class UserServiceImplTest {
         userEntity.setEmail("test23@abv.bg");
         userEntity.setPassword("123456789");
 
+    }
+
+    @AfterEach
+    void closeService() throws Exception {
+        closeable.close();
     }
 
     @Test
