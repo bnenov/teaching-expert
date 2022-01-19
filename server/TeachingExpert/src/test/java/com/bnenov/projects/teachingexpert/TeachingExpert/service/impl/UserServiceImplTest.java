@@ -11,9 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -75,6 +78,25 @@ public class UserServiceImplTest {
 
         assertThrows(UsernameAlreadyExistException.class, () -> {
             userService.createUser(userDto);
+        });
+    }
+
+    @Test
+    final void testLoadUserByUsername() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userEntity);
+
+        User user = (User) userService.loadUserByUsername("test");
+        assertNotNull(user);
+        assertEquals(userEntity.getEmail(), user.getUsername());
+        assertEquals(userEntity.getPassword(), user.getPassword());
+    }
+
+    @Test
+    final void testLoadUserByUsername_UsernameNotFoundException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
+
+        assertThrows(UsernameNotFoundException.class, () -> {
+            userService.loadUserByUsername("test");
         });
     }
 }
