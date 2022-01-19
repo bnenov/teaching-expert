@@ -5,10 +5,14 @@ import com.bnenov.projects.teachingexpert.TeachingExpert.entity.UserEntity;
 import com.bnenov.projects.teachingexpert.TeachingExpert.exception.UsernameAlreadyExistException;
 import com.bnenov.projects.teachingexpert.TeachingExpert.repository.UserRepository;
 import com.bnenov.projects.teachingexpert.TeachingExpert.service.UserService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -39,5 +43,21 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         return modelMapper.map(userRepository.save(user), UserDto.class);
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+        return modelMapper.map(userRepository.findByEmail(email), UserDto.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            throw new UsernameNotFoundException("User does not exist!");
+        }
+
+        return new User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());
     }
 }
